@@ -3,7 +3,11 @@ import db, { connectDatabase } from './config/database.js';
 import { apiRouter } from './routes/api.js';
 
 const app = express();
-const port = Number(process.env.PORT) || 8000;
+const port = 8000;
+const codespaceName = process.env.CODESPACE_NAME;
+const baseUrl = codespaceName
+  ? `https://${codespaceName}-8000.app.github.dev`
+  : `http://localhost:${port}`;
 
 app.use(express.json());
 
@@ -33,6 +37,7 @@ app.use((_request, response) => {
 
 app.listen(port, async () => {
   console.log(`OctoFit API listening on port ${port}`);
+  console.log(`API base URL: ${baseUrl}`);
   try {
     await connectDatabase();
   } catch (error) {
